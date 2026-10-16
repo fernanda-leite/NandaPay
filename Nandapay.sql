@@ -1,7 +1,7 @@
 /*==============================================================*/
 /* Database name:  DB_NANDAPAY                                  */
 /* DBMS name:      ORACLE Version 12c                           */
-/* Created on:     14/09/2021 08:39:34                          */
+/* Created on:     14/09/2021 01:17:47                          */
 /*==============================================================*/
 
 
@@ -235,7 +235,15 @@ create table TB_HST_TRANSACAO (
    DT_HR_TRANSACAO      DATE                  not null,
    DT_HR_HISTORICO      DATE                  not null,
    constraint PK_TB_HST_TRANSACAO primary key (ID_HST_TRANSACAO)
-);
+)
+   partition by range
+    (DATA_HORA_HISTORICO)
+       (
+           partition q_2026
+    values less than (TIMESTAMP '2027-01-01 00:00:00'),
+           partition q_2027
+    values less than (TIMESTAMP '2028-01-01 00:00:00')
+       );
 
 comment on table TB_HST_TRANSACAO is
 'Tabela que armazena histórico da tabela TB_TRANSACAO';
@@ -275,6 +283,20 @@ comment on column TB_HST_TRANSACAO.DT_HR_TRANSACAO is
 
 comment on column TB_HST_TRANSACAO.DT_HR_HISTORICO is
 'Data e hora em que o registro do histórico foi criado ';
+
+/*==============================================================*/
+/* Index: IDX_DATA_HORA_HISTORICO                               */
+/*==============================================================*/
+create index IDX_DATA_HORA_HISTORICO on TB_HST_TRANSACAO (
+   DT_HR_HISTORICO ASC
+);
+
+/*==============================================================*/
+/* Index: IDX_DATA_HORA_TRANSACAO_HST                           */
+/*==============================================================*/
+create index IDX_DATA_HORA_TRANSACAO_HST on TB_HST_TRANSACAO (
+   DT_HR_TRANSACAO ASC
+);
 
 /*==============================================================*/
 /* Table: TB_REGRA_LIMITE                                       */
@@ -384,7 +406,15 @@ create table TB_TRANSACAO (
    DT_HR_TRANSACAO      DATE                  not null,
    constraint PK_TB_TRANSACAO primary key (ID_TRANSACAO),
    constraint AK_AK_TRANSACAO_TB_TRANS unique (HS_SOLIC_TRANS)
-);
+)
+   partition by range
+    (DATA_HORA_TRANSACAO)
+       (
+           partition Q_2026
+    values less than (TIMESTAMP '2027-01-01 00:00:00'),
+           partition Q_2027
+    values less than (TIMESTAMP '2028-01-01 00:00:00')
+       );
 
 comment on table TB_TRANSACAO is
 'Tabela que armazena transações financeiras';
@@ -456,6 +486,13 @@ create index SOLIC_TRANS_TRANS on TB_TRANSACAO (
 /*==============================================================*/
 create index TIPO_CANAL_TRANS on TB_TRANSACAO (
    ID_TP_CANAL ASC
+);
+
+/*==============================================================*/
+/* Index: IDX_DATA_HORA_TRANSACAO                               */
+/*==============================================================*/
+create index IDX_DATA_HORA_TRANSACAO on TB_TRANSACAO (
+   DT_HR_TRANSACAO ASC
 );
 
 alter table TABELA_CLIENTE_CONTA
