@@ -1,13 +1,12 @@
 {
   "meta":{
-	"idEvento": "444",
+	"idTpEvento": "444",
 	"tpEvento": "MUDANCA STATUS TRANSACAO",
 	"dthrEvento": "2026-10-12T19:47:00Z",
 	"versaoContrato": "1.0"}
   "data": {
-    "idTransacao": "123",
-	"hash": "trc_8f4c7e12-9a2b-4c5d-8e7f-1a2b3c4d5e6f",
-    "statusAtual": "AUTORIZADA",
-    "dthrStatus": "2026-10-12T19:46:59Z"
+    "hash": "trc_8f4c7e12-9a2b-4c5d-8e7f-1a2b3c4d5e6f",
+    "status": "AUTORIZADA",
+    "dthr": "2026-10-12T19:46:59Z"
   }
 }
